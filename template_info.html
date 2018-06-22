@@ -1,0 +1,71 @@
+{% macro indent(c) %}
+{%- for i in range(c) %} {% endfor -%}
+{% endmacro %}
+
+{% macro subdict(dictionary, in = 0) %}
+  {%- for key, val in dictionary.items() %}
+    {% if val|attr("__dict__") is defined and val.__dict__|length > 0 -%}      {#- object -#}
+    {{ indent(in) }}{{ key }}: {{ val.__class__|e }}
+      {%- for k, v in val.__dict__.items() %}
+    {{ indent(in+2) }}{{k}}: {{ v|e }}
+      {%- endfor -%}
+    {% elif val is iterable and val|attr("items") and val|length > 0 -%}       {#- dictionary -#}
+    {{ indent(in) }}{{ key }}: { ... }
+    {{ subdict(val, in + 2) }}
+    {% elif val is iterable and val|attr("sort") and val|length > 0 -%}        {#- list -#}
+    {{ indent(in) }}{{ key }}: [ ... ]
+    {{ sublist(val, in + 2) }}
+    {%- else -%}
+    {{ indent(in) }}{{key}}: {{ val|e }}
+    {%- endif -%}
+  {%- endfor -%}
+{% endmacro %}
+
+{% macro sublist(list, in = 0) %}
+    {%- for i in range(list|length) %}
+    {%- set val = list[i] -%}
+    {% if val|attr("__dict__") is defined and val.__dict__|length > 0 -%}      {#- object -#}
+    {{ indent(in) }}{{ i }}: {{ val.__class__|e }}
+      {%- for k, v in val.__dict__.items() %}
+    {{ indent(in+2) }}{{k}}: {{ v|e }}
+      {%- endfor %}
+    {% elif val is iterable and val|attr("items") and val|length > 0 -%}       {#- dictionary -#}
+    {{ indent(in) }}{{ key }}: { ... }
+      {{ subdict(val, in + 2) }}
+    {% elif val is iterable and val|attr("sort") and val|length > 0 -%}        {#- list -#}
+    {{ indent(in) }}{{ key }}: [ ... ]
+      {{ sublist(val, in + 2) }}
+    {%- else -%}
+    {{ indent(in) }}{{ i }}: {{ val|e }}
+    {%- endif -%}
+  {%- endfor -%}
+{% endmacro %}
+
+{% macro render_info(local_variables=none) %}
+  {% if local_variables -%}
+  <b>Local variables:</b>
+    {{ subdict(local_variables) }}
+
+  {% endif -%}
+  {% if template_info.template -%}
+  <b>Template:</b>
+
+    {{ template_info.template }}
+
+  {% endif -%}
+  {%- if template_info.data -%}
+  <b>Input Variables:</b>
+    {{ subdict(template_info.data) }}
+  {%- endif %}
+
+  <b>Context:</b>
+
+    {% for key, val in template_info.context().get_all().items() %}{{key}}: {{ val|e }}
+    {% endfor %}
+
+  {%- if template_info.undefined %}
+  <b>Undefined objects:</b>
+
+    {{ template_info.undefined }}
+  {%- endif %}
+{% endmacro %}

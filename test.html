@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html id="html" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Jinja2 template info</title>
+  </head>
+  <body>
+    {%- set template_variable = "Variable from template" %}
+    <h3>Using variables</h3>
+    {{ template_variable }}<br>
+    {{ code_variable }}<br>
+    {{ missing_variable }}<br>
+
+    {%- if template_info is defined %}
+    {%- from 'template_info.html' import render_info %}
+    <pre class="template_info">
+      {{ render_info(template_info.context().get_exported()) }}
+      {#{ render_info() }#}
+    </pre>
+    {% endif %}
+  </body>
+</html>
