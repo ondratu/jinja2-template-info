@@ -1,18 +1,11 @@
 # -*- coding: utf-8 -*-
-"""Jinja2 Extension for template debugging.
-
->>> from jinja2_template_info import render
->>> render("test.html", "./", debug=True,
-...        code_variable="Variable from code")
-...        # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-'<!DOCTYPE html>...</html>'
-"""
+"""Jinja2 Extension for template debugging."""
 
 from jinja2 import Environment, FileSystemLoader, DebugUndefined, \
     contextfunction
 from jinja2.ext import Extension
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
 __author__ = "Ondřej Tůma"
 __email__ = "mcbig@zeropage.cz"
 __license__ = "BSD"
@@ -94,6 +87,12 @@ class TemplateInfoExtension(Extension):
 
 def render(filename, path, **kwargs):
     """Render template with some info variables.
+
+    >>> from jinja2_template_info import render
+    >>> render("test.html", "./", debug=True,
+    ...        code_variable="Variable from code")
+    ...        # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    '<!DOCTYPE html>...</html>'
     """
 
     env = Environment(loader=FileSystemLoader(path))
