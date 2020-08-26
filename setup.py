@@ -1,9 +1,11 @@
 """package installation."""
-from setuptools import setup
-from io import open
+import re
 
-from jinja2_template_info import __version__, __author__, \
-    __email__, __license__, __doc__ as description
+from setuptools import setup
+
+METADATA = {}
+with open("jinja2_template_info.py", "r") as info:
+    METADATA = dict(re.findall(r'__([a-z_]+)__ = "([^"]+)"', info.read()))
 
 
 def doc():
@@ -14,14 +16,14 @@ def doc():
 
 setup(
     name="Jinja2-template_info",
-    version=__version__,
-    author=__author__,
-    author_email=__email__,
-    description=description,
+    version=METADATA["version"],
+    author=METADATA["author_name"],
+    author_email=METADATA["author_email"],
+    description=METADATA["description"],
     long_description=doc(),
     long_description_content_type="text/x-rst",
-    url="https://github.com/ondratu/jinja2-template-info",
-    license=__license__,
+    url=METADATA["url"],
+    license=METADATA["license"],
     py_modules=["jinja2_template_info"],
     data_files=[("share/doc/jinja2_template_info",
                  ["README.rst", "COPYING", "ChangeLog", "AUTHORS"]),
@@ -34,7 +36,7 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",
         "Operating System :: OS Independent",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries"],
+    install_requires=["Jinja2"],
     )

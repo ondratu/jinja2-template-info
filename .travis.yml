@@ -1,0 +1,37 @@
+---
+language: python
+
+install:
+ - pip3 install pytest pytest-pylint pytest-doctestplus jinja2
+
+script:
+ - pytest -v --pylint --doctest-plus --doctest-rst
+
+before_deploy:
+ - python3 setup.py sdist
+ - python3 setup.py bdist_wheel
+
+deploy:
+ - provider: pypi
+   user: __token__
+   password:
+    secure: Cw4P+n3AvBG/NJX691sU+xWDoWMKywbsk+iuqDhHkD1p4DBe0zLIjDntbQzVRPGGG01ptTLDMgOMAtMCb+L/7dARtgAzC2v/76cmox5Yj2k2jBg4muxwJqjqSWit+5nhIA0y6YFYs4hIKgnrLLnd4Wz+xBXZ8f/Z+vyyI8/zHDpZUP2F4VopKNJ6OBDx5z6MJ1BioVp0qgw08WcbbzQkx0f9ICYDkgI2MmWyhTn0MTXOIkJb0wZhM2rTcpf5wzAAvwsPgWDGvngKqGyQCdwCDBGhunYuL8OJfL4e1H2YmvmkvIFE5OhtTni9SmT9iWzXUVKSlKufZPFRITiyGjnZdZpd8oClK64cDIhuNTAvSD/3DMhEM2FuVcg9ySL4jM5i3rtF0B6ASr9oG9Is6rFG+1UGsYd24vQODR8BUzmMzcpxU1L9TbvVERL2TPKQg7Fa90c8Sn+7167A+AY3Yj4O4lK/3yC0Lj95m5bI6UnACzAoSC59KtWAulKfOhr42K0hJpUDOed4ZGqXofMmj2v+tHO72p2TzhF6pdgGoB7DclOmSYj+Aw/fQKimx4RK34JIrMEr1eQncjOFViXR8whyfA8YwpxbtUG0wUT65wn5oGfsxYcsoU+11sNUX+OYZRl587zzfGVEimkm29LtpLKWeJmEd8VIs6V5uI+aYdEeyM8=
+   distribution: sdist bdist_wheel
+   skip_cleanup: true
+   overwrite: true
+   on:
+    repo: ondratu/jinja2-template-info
+    branch: master
+    tags: true
+ - provider: releases
+   api_key:
+    secure: b1WgOpbTsf4ffEiQMN5sfTZ7icVltAVuFTnNsybzwEZ7NNW8I2YDy5rrz9ycxGZmd3tyOh/7yqVnlAug/HWzYUO89Ow+Jcpb+kyQJ3yFh7ELRx9FxsoQhePxvAtXhPIB0dc63ZHKLxs75EHffXZjACWjniR0gt1zRgK64F+mv1iNLxxkqWYbisVitGeUr9bAmr1mJnwA9MIIFgdoOK/WlsphETfepAtwaKf3nFITFJ8n9x5aXyYqRQ1B4aJh6RjxLeuI9koz5z1BZNXMVs8ftil3pay8/anv8c6CdXvbpGmsWZzkQkw5y8IecUTxSLjLLCgqT8Y0pZw1O+uJC56VJQErIT3YfhozqluEXVHXpnCM+V6am858d+qftl++qRYC6stR/s/fSUuWvvfQScvIjpPZV1qkpkQYXAdOLLJQ3zmzPQ5A5T7GVzVnVC2sDHfY/G8mK8sQ2/sjFZZr53bEq9UGvWF74yPZq7xC9Ht8kb+nwKTRxmLVu3L7TvUwsaD7HCoIMyzE93C9ngEbKQouHVZFTDtYGtbIEVTFTt0t+coEDMvxm+AjhcNKKDpbuy7oFNT7zOsp+qNqnNMC61wLsys4xsVEu5OcWlxXo66Jq45DhtoZ52v/IJ4vkKFv8j2rN3BHGDFh0h7Na3q4DK4wE+BaD6iYN7ya7APmfw+X2gE=
+   file:
+    - dist/Jinja2-template-info-$TRAVIS_TAG.tar.gz
+    - dist/Jinja2-template-info-$TRAVIS_TAG-py3-none-any.whl
+   skip_cleanup: true
+   overwrite: true
+   on:
+    repo: ondratu/jinja2-template-info
+    branch: master
+    tags: true

@@ -5,10 +5,14 @@ from jinja2 import Environment, FileSystemLoader, DebugUndefined, \
     contextfunction
 from jinja2.ext import Extension
 
-__version__ = "0.1.1"
-__author__ = "Ondřej Tůma"
-__email__ = "mcbig@zeropage.cz"
+__version__ = "0.1.2"
+__date__ = "26 Aug 2020"
+__author_name__ = "Ondřej Tůma"
+__author_email__ = "mcbig@zeropage.cz"
+__author__ = f"{__author_name__} <{__author_email__}>"
 __license__ = "BSD"
+__description__ = "Jinja2 Extension for template debugging."
+__url__ = "https://github.com/ondratu/jinja2-template-info"
 
 
 @contextfunction
@@ -20,7 +24,7 @@ def ctx(context):
     return context
 
 
-class TemplateInfo(object):
+class TemplateInfo():
     """Object to store template information.
 
     * context - function returns Jinja Context object.
@@ -29,6 +33,7 @@ class TemplateInfo(object):
     * template - filename of template.
 
     """
+    # pylint: disable=too-few-public-methods
     def __init__(self):
         self.context = ctx
         self.data = None
@@ -51,12 +56,13 @@ class TemplateInfoExtension(Extension):
     '<!DOCTYPE html>...</html>'
     """
     def __init__(self, environment):
-        super(TemplateInfoExtension, self).__init__(environment)
+        super().__init__(environment)
         info = TemplateInfo()
 
         class MissingUndefined(DebugUndefined):
             """Debug class for _miss_ variable in jinja."""
             def __recursion__(self, *args, **kwargs):
+                # pylint: disable=unused-argument
                 info.undefined.append(self._undefined_name)
                 return MissingUndefined()
 
@@ -79,10 +85,11 @@ class TemplateInfoExtension(Extension):
                 info.undefined.append(self._undefined_name)
                 return '[Undefined] %s' % self._undefined_name
 
-            __unicode__ = __str__   # for python2.x compatibility
-
         environment.undefined = MissingUndefined
         environment.globals['template_info'] = info
+
+    def parse(self, parser):
+        """Only compatibility definition."""
 
 
 def render(filename, path, **kwargs):

@@ -1,6 +1,12 @@
 ChangeLog
 =========
 
+0.1.2
+-----
+* package fixes
+* jinja2 dependency
+* Python 3x only
+
 0.1.1
 -----
 * package info fix
