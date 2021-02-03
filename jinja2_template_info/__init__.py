@@ -1,12 +1,17 @@
 # -*- coding: utf-8 -*-
 """Jinja2 Extension for template debugging."""
 
+try:
+    from importlib.resources import files
+except ImportError:
+    from importlib_resources import files
+
 from jinja2 import Environment, FileSystemLoader, DebugUndefined, \
     contextfunction
 from jinja2.ext import Extension
 
-__version__ = "0.1.2"
-__date__ = "26 Aug 2020"
+__version__ = "0.2.0"
+__date__ = "3 Feb 2021"
 __author_name__ = "Ondřej Tůma"
 __author_email__ = "mcbig@zeropage.cz"
 __author__ = f"{__author_name__} <{__author_email__}>"
@@ -44,10 +49,15 @@ class TemplateInfo():
 class TemplateInfoExtension(Extension):
     """Jinja2 Extension which append template_info object to environment.
 
+    >>> try:
+    ...     from importlib.resources import files
+    ... except ImportError:
+    ...     from importlib_resources import files
     >>> from jinja2 import Environment, FileSystemLoader
     >>> from jinja2_template_info import TemplateInfoExtension
     >>> data = {"title":"Title"}
-    >>> env = Environment(loader=FileSystemLoader("./"),
+    >>> path = (files('jinja2_template_info'), "./")
+    >>> env = Environment(loader=FileSystemLoader(path),
     ...                   extensions=[TemplateInfoExtension])
     >>> env.globals["template_info"].data = data.copy()
     >>> env.globals["template_info"].template = "test.html"
@@ -101,6 +111,11 @@ def render(filename, path, **kwargs):
     ...        # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     '<!DOCTYPE html>...</html>'
     """
+    info_path = files('jinja2_template_info')
+    if isinstance(path, (list, tuple)):
+        path = tuple(path)+(info_path,)
+    else:  # str
+        path = (info_path, path)
 
     env = Environment(loader=FileSystemLoader(path))
     if kwargs.get("debug"):

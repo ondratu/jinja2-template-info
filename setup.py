@@ -1,10 +1,15 @@
 """package installation."""
 import re
+import importlib
 
 from setuptools import setup
 
+REQUIREMENTS = ["Jinja2"]
+if not hasattr(importlib, "resources"):
+    REQUIREMENTS.append("importlib_resources")
+
 METADATA = {}
-with open("jinja2_template_info.py", "r") as info:
+with open("jinja2_template_info/__init__.py", "r") as info:
     METADATA = dict(re.findall(r'__([a-z_]+)__ = "([^"]+)"', info.read()))
 
 
@@ -24,13 +29,11 @@ setup(
     long_description_content_type="text/x-rst",
     url=METADATA["url"],
     license=METADATA["license"],
-    py_modules=["jinja2_template_info"],
+    packages=["jinja2_template_info"],
     data_files=[("share/doc/jinja2_template_info",
                  ["README.rst", "COPYING", "ChangeLog", "AUTHORS"]),
                 ("share/doc/jinja2_template_info/examples",
-                 ["test.html"]),
-                ("share/jinja2_template_info/templates",
-                 ["template_info.html"])],
+                 ["test.html"])],
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
@@ -38,5 +41,5 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python :: 3",
         "Topic :: Software Development :: Libraries"],
-    install_requires=["Jinja2"],
+    install_requires=REQUIREMENTS,
     )

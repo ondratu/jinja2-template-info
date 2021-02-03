@@ -21,8 +21,13 @@ set.
 
 .. code:: python
 
+    >>> try:
+    ...     from importlib.resources import files
+    ... except ImportError:
+    ...     from importlib_resources import files
     >>> from jinja2_template_info import render
-    >>> render("test.html", "./", debug=True,
+    >>> path = (files('jinja2_template_info'), "./")
+    >>> render("test.html", path, debug=True,
     ...        code_variable="Variable from code")
     ...        # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
     '<!DOCTYPE html>...</html>'
@@ -37,10 +42,15 @@ is use to store undefined variables names. They are in
 
 .. code:: python
 
+    >>> try:
+    ...     from importlib.resources import files
+    ... except ImportError:
+    ...     from importlib_resources import files
     >>> from jinja2 import Environment, FileSystemLoader
     >>> from jinja2_template_info import TemplateInfoExtension
     >>> data = {"title":"Title"}
-    >>> env = Environment(loader=FileSystemLoader("./"),
+    >>> path = (files('jinja2_template_info'), "./")
+    >>> env = Environment(loader=FileSystemLoader(path),
     ...                   extensions=[TemplateInfoExtension])
     >>> env.globals["template_info"].data = data.copy()
     >>> env.globals["template_info"].template = "test.html"
