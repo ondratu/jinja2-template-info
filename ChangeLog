@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+0.2.0
+-----
+* jinja2_template_info is package now,
+  importlib.resources.files function can be used.
+
 0.1.2
 -----
 * package fixes
