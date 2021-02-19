@@ -1,6 +1,11 @@
 ChangeLog
 =========
 
+0.2.2
+-----
+* fix debug info
+* mypy package
+
 0.2.1
 -----
 * add missing template_info file to bdist packages

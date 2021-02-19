@@ -7,11 +7,11 @@ python:
  - "3.9"
 
 install:
- - pip3 install pytest pytest-pylint pytest-doctestplus jinja2
-   importlib_resources
+ - pip3 install pytest pytest-pylint pytest-mypy pytest-doctestplus
+   jinja2 importlib_resources
 
 script:
- - pytest -v --pylint --doctest-plus --doctest-rst
+ - pytest -v --pylint --mypy --doctest-plus --doctest-rst
 
 before_deploy:
  - python3 setup.py sdist

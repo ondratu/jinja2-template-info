@@ -2,7 +2,7 @@
 import re
 import importlib
 
-from setuptools import setup
+from setuptools import setup  # type: ignore
 
 REQUIREMENTS = ["Jinja2"]
 if not hasattr(importlib, "resources"):
@@ -30,7 +30,7 @@ setup(
     url=METADATA["url"],
     license=METADATA["license"],
     packages=["jinja2_template_info"],
-    package_data={"": ["template_info.html"]},
+    package_data={"": ["py.typed", "template_info.html"]},
     data_files=[("share/doc/jinja2_template_info",
                  ["README.rst", "COPYING", "ChangeLog", "AUTHORS"]),
                 ("share/doc/jinja2_template_info/examples",

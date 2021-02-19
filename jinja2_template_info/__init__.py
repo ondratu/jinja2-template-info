@@ -2,7 +2,7 @@
 """Jinja2 Extension for template debugging."""
 
 try:
-    from importlib.resources import files
+    from importlib.resources import files  # type: ignore
 except ImportError:
     from importlib_resources import files
 
@@ -10,8 +10,8 @@ from jinja2 import Environment, FileSystemLoader, DebugUndefined, \
     contextfunction
 from jinja2.ext import Extension
 
-__version__ = "0.2.1"
-__date__ = "3 Feb 2021"
+__version__ = "0.2.2"
+__date__ = "19 Feb 2021"
 __author_name__ = "Ondřej Tůma"
 __author_email__ = "mcbig@zeropage.cz"
 __author__ = f"{__author_name__} <{__author_email__}>"
