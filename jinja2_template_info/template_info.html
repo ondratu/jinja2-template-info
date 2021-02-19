@@ -6,7 +6,8 @@
   {%- for key, val in dictionary.items() %}
     {% if val|attr("__dict__") is defined and val.__dict__|length > 0 -%}      {#- object -#}
     {{ indent(in) }}{{ key }}: {{ val.__class__|e }}
-      {%- for k, v in val.__dict__.items() %}
+      {%- set private= '_'+val|attr("__class__")|attr("__name__")+'__' -%}
+      {%- for k, v in val.__dict__.items() if not k.startswith(private) %}
     {{ indent(in+2) }}{{k}}: {{ v|e }}
       {%- endfor -%}
     {% elif val is iterable and val|attr("items") and val|length > 0 -%}       {#- dictionary -#}
@@ -30,10 +31,10 @@
     {{ indent(in+2) }}{{k}}: {{ v|e }}
       {%- endfor %}
     {% elif val is iterable and val|attr("items") and val|length > 0 -%}       {#- dictionary -#}
-    {{ indent(in) }}{{ key }}: { ... }
+    {{ indent(in) }}{{ i }}: { ... }
       {{ subdict(val, in + 2) }}
     {% elif val is iterable and val|attr("sort") and val|length > 0 -%}        {#- list -#}
-    {{ indent(in) }}{{ key }}: [ ... ]
+    {{ indent(in) }}{{ i }}: [ ... ]
       {{ sublist(val, in + 2) }}
     {%- else -%}
     {{ indent(in) }}{{ i }}: {{ val|e }}
