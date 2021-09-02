@@ -4,12 +4,12 @@ import importlib
 
 from setuptools import setup  # type: ignore
 
-REQUIREMENTS = ["Jinja2"]
+REQUIREMENTS = ["Jinja2>=3.0.0"]
 if not hasattr(importlib, "resources"):
     REQUIREMENTS.append("importlib_resources")
 
 METADATA = {}
-with open("jinja2_template_info/__init__.py", "r") as info:
+with open("jinja2_template_info/__init__.py", "r", encoding='utf-8') as info:
     METADATA = dict(re.findall(r'__([a-z_]+)__ = "([^"]+)"', info.read()))
 
 
