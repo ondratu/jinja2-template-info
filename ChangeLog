@@ -1,5 +1,9 @@
 ChangeLog
 =========
+0.2.4
+-----
+ * mypy fix for importlib_resources
+
 0.2.3
 -----
  * fix for Jinja2 3.x

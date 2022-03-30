@@ -4,14 +4,14 @@
 try:
     from importlib.resources import files  # type: ignore
 except ImportError:
-    from importlib_resources import files
+    from importlib_resources import files  # type: ignore
 
 from jinja2 import Environment, FileSystemLoader, DebugUndefined, \
     pass_context
 from jinja2.ext import Extension
 
-__version__ = "0.2.3"
-__date__ = "2 Sep 2021"
+__version__ = "0.2.4"
+__date__ = "30 Mar 2022"
 __author_name__ = "Ondřej Tůma"
 __author_email__ = "mcbig@zeropage.cz"
 __author__ = f"{__author_name__} <{__author_email__}>"
@@ -93,6 +93,7 @@ class TemplateInfoExtension(Extension):
                 if self._undefined_name is None:
                     return ''
                 info.undefined.append(self._undefined_name)
+                # pylint: disable=consider-using-f-string
                 return '[Undefined] %s' % self._undefined_name
 
         environment.undefined = MissingUndefined
